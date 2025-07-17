@@ -7,7 +7,7 @@
 '''
 import torch
 from torch import nn as nn
-from torch.nn import ReLU, Conv2d, MaxPool2d, Linear, Flatten, Dropout
+from torch.nn import ReLU, Conv2d, MaxPool2d, Linear, Flatten, Dropout, LocalResponseNorm
 from torchsummary import summary
 
 class AlexNet(nn.Module):
@@ -25,6 +25,8 @@ class AlexNet(nn.Module):
         self.c7 = Conv2d(in_channels=384, out_channels=256, kernel_size=3, stride=1, padding=1)
         self.s8 = MaxPool2d(kernel_size=3, stride=2)
         self.relu = ReLU()
+        # 局部归一化响应层
+        self.lrn = LocalResponseNorm(size=5, alpha=0.0001, beta=0.75, k=2)
         self.flatten = Flatten()
         self.f9 = Linear(in_features=256 * 6 * 6, out_features=4096)
         self.f10 = Linear(in_features=4096, out_features=4096)
@@ -40,8 +42,10 @@ class AlexNet(nn.Module):
         """
         x = self.relu(self.c1(x))
         x = self.s2(x)
+        x = self.lrn(x)
         x = self.relu(self.c3(x))
         x = self.s4(x)
+        x = self.lrn(x)
         x = self.relu(self.c5(x))
         x = self.relu(self.c6(x))
         x = self.relu(self.c7(x))
