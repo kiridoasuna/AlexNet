@@ -50,5 +50,17 @@ def set_main_process_seed(seed=42):
     g.manual_seed(seed)
     return g
 
+def get_train_and_val_data_size(total_size, p=0.8):
+    """
+    计算训练集和验证集的数据大小
+    :param total_size: 数据总数
+    :param p: 训练集占的比例
+    :return: 训练集和验证集的大小
+    """
+    train_data_size = round(0.8 * total_size)
+    val_data_size = total_size - train_data_size
+
+    return train_data_size, val_data_size
+
 if __name__ == '__main__':
     set_random_seed()
