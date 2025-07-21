@@ -9,6 +9,7 @@
 import copy
 import time
 import pandas as pd
+import config
 
 import torch
 from torch import nn
@@ -61,7 +62,7 @@ def train_process(model, train_data_loader, val_data_loader, epochs):
     # 初始化设备
     device_cuda = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # 优化器
-    optimizer = Adam(model.parameters(), lr=0.001)
+    optimizer = Adam(model.parameters(), lr=config.LEARNING_RATE)
     # 交叉熵损失函数
     loss_func_cross_entropy = nn.CrossEntropyLoss()
     # 将模型放入设备中
@@ -189,7 +190,7 @@ if __name__ == '__main__':
     AlexNet = AlexNet()
     train_data, val_data = data_process()
 
-    train_process_data = train_process(AlexNet, train_data, val_data, 20)
+    train_process_data = train_process(AlexNet, train_data, val_data, config.NUM_EPOCHS)
 
     show_acc_loss_matplot(train_process_data)
 
